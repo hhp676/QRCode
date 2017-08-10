@@ -36,39 +36,62 @@ border:1px solid #000;
 </br>
 </br>
 </br>
-<a href="http://www.52itstyle.com/forum-54-1.html" >更多源码点击这里</a>
 </div>
 <div> 
-=========================================================================
 </div>
+=========================================================================
+<br>
+《请在d盘file下创建"HNfile"文件夹》
+<input type="button" value="点击生成红牛的二维码" onclick="encoderHongniu(this)" ></br>
+<br>
+<hr>
 <div>
-  输入你要生成的文字说明 ：<textarea rows="5" cols="30" id="content" ></textarea></br>
+  输入你要生成的文字说明 《请在d盘下创建"file"文件夹》：
+  <input id="content" value=""></input>
+  </br>
 <input type="button" value="点击生成二维码" onclick="encoderQRCode(this)" ></br>
 <img id="imageShow" src="">
 </div>
 <script type="text/javascript">
 var basePath = '<%=basePath%>';
 //生成二维码
+function encoderHongniu(thisObj){
+	$.ajax({
+		url:"qRCodeAction_encoderHongniu.action",
+      	async:false,
+      	type:'post',
+      	dataType:'text',
+      	data: {'time':(new Date()).toString(),content:"sss"},
+		success:function(result){
+			var imgName = eval("("+result+")");
+			var imgPath = basePath+"file/"+imgName;
+			$("#imageShow").attr("src",imgPath);
+		}
+	});
+}
+
 function encoderQRCode(thisObj){
-	var content = $.trim($("#content").html())
+	var content = $.trim($("#content").val());
 	if(""===content){
-		alert("小逗比请书写内容");
+		alert("输入内容");
 		return;
-	}
+	} 
 	$.ajax({
 		url:"qRCodeAction_encoderQRCode.action",
       	async:false,
       	type:'post',
       	dataType:'text',
-      	data: {'time':(new Date()).toString(),content:content},
+      	data: {'time':(new Date()).toString(),content:"sss"},
 		success:function(result){
 			var imgName = eval("("+result+")");
-			var imgPath = basePath+"file/"+imgName;
-			$("#imageShow").attr("src",imgPath);
+			var imgPath = "D:\\file\\"+imgName;
+			$("#imageShow").attr("src", basePath+"file/"+imgName);
 			$(thisObj).hide();
 		}
 	});
 }
+
+
 //解析二维码
 function decoderQRCode(){
 	document.forms[0].action="qRCodeAction_decoderQRCode.action";
